@@ -44,7 +44,7 @@ src/cart.py                     le CART final, importé par les notebooks
 notebooks/01_cart_from_scratch.ipynb   construction pas à pas du CART (style Lab 1, checkpoints)
 notebooks/02_experiments.ipynb         exploration, expériences, réponse à la question, limites
 tests/test_cart.py              vérifications automatiques (uv run pytest)
-report/                         rapport PDF
+report/                         rapport PDF (créé au moment du rendu)
 ```
 
 Proposition à valider : le code du CART est écrit **une seule fois**, dans `src/cart.py`. Le

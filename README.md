@@ -22,12 +22,12 @@ performances que `DecisionTreeClassifier` de scikit-learn sur les mêmes splits 
 ## Structure
 
 ```
-src/data.py                     chargement, encodage, split train/val/test (graine 42)
-src/cart.py                     arbre CART from scratch (NumPy)
-PLAN.md                         plan du projet et répartition en 4 lots
-experiments/compare_sklearn.py  comparaison avec scikit-learn sur les mêmes splits
-tests/test_cart.py              vérifications numériques (Gini, premier split vs sklearn)
-report/                         rapport PDF
+src/data.py          chargement et préparation des données
+src/cart.py          arbre CART from scratch
+tests/test_cart.py   tests du CART
+PLAN.md              plan du projet
+pyproject.toml       dépendances
+uv.lock              versions exactes des dépendances
 ```
 
 ## Reproduire les résultats
@@ -39,7 +39,6 @@ pour des versions identiques chez tout le monde).
 uv sync                                       # crée .venv et installe les versions du uv.lock
 uv run python -m src.data                     # télécharge Adult et affiche la taille des splits
 uv run pytest                                 # vérifications de l'implémentation
-uv run python -m experiments.compare_sklearn  # comparaison from scratch vs scikit-learn
 ```
 
 Ajouter une dépendance : `uv add <paquet>` (jamais `pip install`).
