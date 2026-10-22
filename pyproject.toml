@@ -1,0 +1,17 @@
+[project]
+name = "ml-project-bootcamp"
+version = "0.1.0"
+description = "CART from scratch sur le dataset Adult (Census Income)"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.4.6",
+    "pandas>=3.0.6",
+    "scikit-learn>=1.9.1",
+    "seaborn>=0.13.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
