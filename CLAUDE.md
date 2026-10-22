@@ -7,6 +7,22 @@ Machine Learning » d'Alassane Diallo (Albert School, MSc 1). Réponds en franç
 - Rendu (rapport PDF + code) : 6 novembre 2026 au plus tard. Oral : 13 novembre 2026.
 - Barème : rapport 20 %, implémentation from scratch 25 %, expériences et analyse 25 %, oral 15 %, questions 15 %.
 
+## 🔄 Décisions
+- Question de recherche : « L'éducation est-elle le principal déterminant d'un revenu > 50K $, ou
+  d'autres facteurs (situation familiale, âge, temps de travail) pèsent-ils davantage ? »
+  (EN : *Is education the main driver of earning more than $50K a year, or do other factors such
+  as marital status, age and hours worked matter more?*). Hypothèse de départ : l'éducation est n°1.
+- Langue des livrables (notebooks, code, commentaires, rapport) : anglais. Conversation : français.
+- Deux notebooks : `notebooks/01_cart_from_scratch.ipynb` (implémentation pas à pas, style Lab 1,
+  checkpoints) et `notebooks/02_experiments.ipynb` (exploration, profondeur, comparaison sklearn
+  sur le test, réponse à la question via premier split / importances regroupées par variable
+  d'origine / arbre lisible / ablation, limites). Le CART final vit dans `src/cart.py`.
+- Environnement : uv.
+
+## 🔄 Avancement
+- 22/10 : structure du projet (PR #2), données vérifiées en local : 29 304 / 9 769 / 9 769 lignes,
+  91 variables, 23,9 % de >50K. CART pas encore codé.
+
 ## Règles de la consigne
 - Le CART (`src/cart.py`) est écrit avec NumPy uniquement. scikit-learn ne sert qu'à la comparaison,
   aux métriques et au découpage (`train_test_split`).
