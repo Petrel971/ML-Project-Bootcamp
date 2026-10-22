@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Données téléchargées (non redistribuées) et sorties générées
+data/
+results/
+
+# Supports de cours (non redistribués)
+docs/
