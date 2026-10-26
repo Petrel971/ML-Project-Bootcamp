@@ -22,12 +22,14 @@ performances que `DecisionTreeClassifier` de scikit-learn sur les mêmes splits 
 ## Structure
 
 ```
-src/data.py          chargement et préparation des données
-src/cart.py          arbre CART from scratch
-tests/test_cart.py   tests du CART
-PLAN.md              plan du projet
-pyproject.toml       dépendances
-uv.lock              versions exactes des dépendances
+notebooks/01_cart_from_scratch.ipynb   construction du CART pas à pas
+notebooks/02_experiments.ipynb         expériences et réponse à la question
+src/data.py                            chargement et préparation des données
+src/cart.py                            arbre CART from scratch
+tests/test_cart.py                     tests du CART
+PLAN.md                                plan du projet
+pyproject.toml                         dépendances
+uv.lock                                versions exactes des dépendances
 ```
 
 ## Reproduire les résultats
