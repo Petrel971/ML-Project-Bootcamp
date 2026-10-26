@@ -92,10 +92,16 @@ même code en double.
 
 ## 4. Répartition en 3 lots
 
-Chaque membre prend un lot. Les **interfaces** sont fixées à l'avance pour que tout le monde
+| Lot | Responsable |
+|---|---|
+| 1. Le CART from scratch | **Lucas** |
+| 2. Données, protocole et comparaison avec sklearn | **Manuel** |
+| 3. Réponse à la question, limites et rapport | **Amine** |
+
+Les **interfaces** sont fixées à l'avance pour que tout le monde
 avance en parallèle, sans attendre les autres.
 
-### Lot 1 : le CART from scratch (implémentation, 25 % de la note)
+### Lot 1 : le CART from scratch (implémentation, 25 % de la note) — **Lucas**
 
 - Dans `src/cart.py` : `gini`, `entropy`, le score d'un split, `best_split` (version naïve **et**
   version vectorisée), la construction récursive et ses critères d'arrêt, `predict_proba`,
@@ -108,7 +114,7 @@ avance en parallèle, sans attendre les autres.
   `fit`, `predict`, `predict_proba`, `feature_importances_`, comme sklearn.
 - Charge : forte jusqu'au 29 octobre, plus légère ensuite.
 
-### Lot 2 : données, protocole et comparaison avec sklearn
+### Lot 2 : données, protocole et comparaison avec sklearn — **Manuel**
 
 - Notebook 02, sections 1 à 6 : problème et données, exploration, protocole, baseline, choix de
   la profondeur, comparaison finale sur le test (métriques, matrices de confusion, accord des
@@ -119,7 +125,7 @@ avance en parallèle, sans attendre les autres.
   `CARTClassifier` quand il est prêt : l'interface est la même.
 - Charge : régulière.
 
-### Lot 3 : réponse à la question, limites et rapport
+### Lot 3 : réponse à la question, limites et rapport — **Amine**
 
 - Notebook 02, sections 7 à 9 : premier split, importances regroupées par variable d'origine,
   arbre lisible de profondeur 3, ablation, conclusion ; limites (instabilité sur 5 graines,
@@ -137,7 +143,7 @@ questions de l'oral est individuelle.
 
 ## 5. Planning
 
-| Dates | Lot 1 (CART) | Lot 2 (données, comparaison) | Lot 3 (question, limites, rapport) |
+| Dates | Lot 1 : Lucas (CART) | Lot 2 : Manuel (données, comparaison) | Lot 3 : Amine (question, limites, rapport) |
 |---|---|---|---|
 | **26–27 oct** | Gini, score d'un split, `best_split` naïf | exploration, baseline | squelette du rapport, arbre lisible (sklearn) |
 | **28–29 oct** | version vectorisée, construction, prédiction, importances | protocole, courbe de profondeur (sklearn) | importances regroupées, ablation (sklearn) |
