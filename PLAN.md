@@ -90,51 +90,44 @@ même code en double.
 
 ---
 
-## 4. Répartition en 4 lots
+## 4. Répartition en 3 lots
 
 Chaque membre prend un lot. Les **interfaces** sont fixées à l'avance pour que tout le monde
 avance en parallèle, sans attendre les autres.
 
-### Lot 1 : la recherche du meilleur split (le cœur mathématique)
+### Lot 1 : le CART from scratch (implémentation, 25 % de la note)
 
-- `gini`, `entropy`, le score d'un split, `best_split` (version naïve **et** version vectorisée)
-  dans `src/cart.py`.
-- Notebook 01, sections 1 à 4 : explications, exercice 3B.1 refait à la main, checkpoints, mesure
-  du temps.
-- Tests : valeurs du Gini, naïf = vectorisé, premier split identique à sklearn.
-- Rapport : §3.1–3.2 (le modèle, le Gini, la recherche du split).
-- **Interface fournie aux autres :** `best_split(X, y, min_samples_leaf) -> (feature, threshold,
-  gain) | None`. La version naïve est livrée **en premier** pour débloquer le lot 2.
-- Charge : forte au début, légère ensuite.
+- Dans `src/cart.py` : `gini`, `entropy`, le score d'un split, `best_split` (version naïve **et**
+  version vectorisée), la construction récursive et ses critères d'arrêt, `predict_proba`,
+  `predict`, `feature_importances_`, la classe `CARTClassifier`.
+- Notebook 01 en entier : explications, exercice 3B.1 refait à la main, checkpoints, mesure du temps.
+- Tests : valeurs du Gini, naïf = vectorisé, même premier split que sklearn, arbre profond =
+  train appris à 100 %, prédictions et importances identiques à sklearn.
+- Rapport : §3 (méthode, pseudo-code).
+- **Interface fournie aux autres :** `CARTClassifier(max_depth=..., min_samples_leaf=...)` avec
+  `fit`, `predict`, `predict_proba`, `feature_importances_`, comme sklearn.
+- Charge : forte jusqu'au 29 octobre, plus légère ensuite.
 
-### Lot 2 : construire l'arbre et prédire
+### Lot 2 : données, protocole et comparaison avec sklearn
 
-- `Node`, la construction récursive et ses critères d'arrêt, `predict_proba`, `predict`,
-  `feature_importances_`, la classe `CARTClassifier`, l'affichage des règles.
-- Notebook 01, sections 5 à 8.
-- Tests : arbre profond = train appris à 100 %, prédictions identiques à sklearn, importances
-  identiques.
-- Rapport : §3.3–3.4 (récursion, arrêt, prédiction, importances, pseudo-code).
-- Peut démarrer tout de suite avec la version naïve de `best_split` du lot 1.
-- Charge : moyenne, et régulière.
-
-### Lot 3 : expériences et réponse à la question
-
-- Notebook 02, sections 5 à 7 : courbe de profondeur, comparaison finale sur le test, coût de
-  calcul, importances regroupées, arbre lisible, ablation, conclusion.
-- Rapport : §5 (résultats) et §6 (réponse à la question).
+- Notebook 02, sections 1 à 6 : problème et données, exploration, protocole, baseline, choix de
+  la profondeur, comparaison finale sur le test (métriques, matrices de confusion, accord des
+  prédictions, temps de calcul).
+- `src/data.py` traduit en anglais, `README.md`, test de reproductibilité sur un clone propre.
+- Rapport : §1–2 (introduction, données), §4 (protocole), §5 (résultats).
 - Peut démarrer tout de suite avec `DecisionTreeClassifier` de sklearn, puis on remplace par
   `CARTClassifier` quand il est prêt : l'interface est la même.
-- Charge : légère au début, forte à la fin. C'est ce lot qui produit les figures clés.
+- Charge : régulière.
 
-### Lot 4 : données, limites, rapport et reproductibilité
+### Lot 3 : réponse à la question, limites et rapport
 
-- Notebook 02, sections 1 à 4 (problème, exploration, protocole, baseline) et section 8 (limites :
-  instabilité, erreurs selon le sexe, seuil, améliorations).
-- `src/data.py` traduit en anglais, `README.md`, test de reproductibilité sur un clone propre.
-- **Coordination du rapport** : squelette LaTeX ou Word, intégration des parties de chacun,
-  bibliographie, mise en page des figures. Rapport : §1–2, §4, §7–8.
-- Charge : régulière, avec un pic à la fin (rapport).
+- Notebook 02, sections 7 à 9 : premier split, importances regroupées par variable d'origine,
+  arbre lisible de profondeur 3, ablation, conclusion ; limites (instabilité sur 5 graines,
+  erreurs selon le sexe, seuil de décision, améliorations).
+- **Coordination du rapport** : squelette, intégration des parties de chacun, bibliographie,
+  mise en page des figures. Rapport : §6–8 (réponse, discussion, conclusion).
+- Peut démarrer tout de suite avec sklearn, comme le lot 2.
+- Charge : légère au début, forte à la fin.
 
 **Pour tout le monde :** chacun rédige sa partie du rapport et prépare ses slides. **Tout le
 monde** doit savoir refaire à la main un calcul de Gini et le choix d'un split : la partie
@@ -144,15 +137,15 @@ questions de l'oral est individuelle.
 
 ## 5. Planning
 
-| Dates | Lot 1 | Lot 2 | Lot 3 | Lot 4 |
-|---|---|---|---|---|
-| **22–24 oct** | version naïve de `best_split` | `Node` et construction (avec la version naïve) | courbe de profondeur avec sklearn | exploration et baseline |
-| **25–29 oct** | version vectorisée, notebook 01 §1–4 | prédiction, importances, notebook 01 §5–8 | comparaison, ablation (sklearn) | protocole, limites, squelette du rapport |
-| **29 oct** | ✅ **le CART passe tous les tests** | ✅ | on passe à notre CART | |
-| **30 oct–2 nov** | rédaction §3.1–3.2 | rédaction §3.3–3.4 | résultats finaux, §5–6 | §1–2, §4, §7, intégration |
-| **2–5 nov** | relecture croisée, test de reproductibilité, export PDF |||
-| **6 nov** | **RENDU** |||
-| **7–12 nov** | slides, répétitions chronométrées, questions probables |||
+| Dates | Lot 1 (CART) | Lot 2 (données, comparaison) | Lot 3 (question, limites, rapport) |
+|---|---|---|---|
+| **26–27 oct** | Gini, score d'un split, `best_split` naïf | exploration, baseline | squelette du rapport, arbre lisible (sklearn) |
+| **28–29 oct** | version vectorisée, construction, prédiction, importances | protocole, courbe de profondeur (sklearn) | importances regroupées, ablation (sklearn) |
+| **29 oct** | ✅ **le CART passe tous les tests** | on passe à notre CART | on passe à notre CART |
+| **30 oct–2 nov** | notebook 01 rédigé, rapport §3 | comparaison finale sur le test, §1–2, §4–5 | limites, §6–8, intégration |
+| **2–5 nov** | relecture croisée, test de reproductibilité, export PDF || |
+| **6 nov** | **RENDU** || |
+| **7–12 nov** | slides, répétitions chronométrées, questions probables || |
 
 ---
 
