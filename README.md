@@ -1,7 +1,7 @@
 # Prédiction du revenu (Adult) avec un arbre CART from scratch
 
 Projet de machine learning (cours d'Alassane Diallo).
-Équipe : Lucas, Manuel, Grégoire, Amine.
+Équipe : Lucas, Manuel, Amine.
 
 ## Objectif
 
@@ -27,6 +27,7 @@ notebooks/02_experiments.ipynb         expériences et réponse à la question
 src/data.py                            chargement et préparation des données
 src/cart.py                            arbre CART from scratch
 tests/test_cart.py                     tests du CART
+CONTEXT.md                             contexte complet du projet et des décisions
 PLAN.md                                plan du projet
 pyproject.toml                         dépendances
 uv.lock                                versions exactes des dépendances
