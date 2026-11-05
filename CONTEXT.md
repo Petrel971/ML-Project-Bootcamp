@@ -19,7 +19,8 @@ Pour le détail des tâches et du planning, voir [PLAN.md](PLAN.md).
 - Cours : *Mathematics & Statistics for Machine Learning*, Alassane Diallo, Albert School, MSc 1
   (MSA-DATI07-04).
 - Équipe : **Lucas, Manuel, Amine** (3 membres).
-- **Rendu (rapport PDF + code) : 6 novembre 2026 au plus tard.** Oral : **13 novembre 2026**.
+- **Rendu (rapport PDF + code) : week-end du 7-8 novembre 2026** (le prof accepte un rendu le week-end,
+  annonce Inside du 21/10). Oral : **13 novembre 2026**.
   Le rendu doit arriver 7 jours avant l'oral : le prof relit et exécute le code avant.
 - Barème :
 
@@ -147,18 +148,18 @@ fonction, `SEED = 42`.
 
 ## 8. État d'avancement
 
-*Dernière mise à jour : 26/10/2026.*
+*Dernière mise à jour : 05/11/2026.*
 
-- ✅ Structure du repo, chargement et préparation des données (vérifiés sur les vraies données).
-- ✅ Squelettes des deux notebooks (titres, setup, cellules TODO), utilisables dans VS Code.
-- ⬜ **CART** : `src/cart.py` n'est qu'un squelette, toutes ses fonctions lèvent
-  `NotImplementedError`. Les 3 tests échouent pour cette raison, c'est normal.
-- ⬜ Expériences du notebook 02.
-- ⬜ Rapport, slides.
-- ⬜ Répartition des 3 lots entre Lucas, Manuel et Amine (voir [PLAN.md](PLAN.md)).
-
-**Prochaine étape :** coder `gini`, le score d'un split, puis la version naïve de `best_split`
-(notebook 01, sections 2 à 4).
+- ✅ Structure du repo, données, préparation.
+- ✅ **CART** dans `src/cart.py` : Gini/entropie, recherche naïve et vectorisée, construction, 5 critères
+  d'arrêt, élagage `ccp_alpha`, importances. 6 tests passent ; identique à sklearn (aux égalités près).
+- ✅ Notebook 01 rédigé et exécuté (checkpoints OK).
+- ✅ Notebook 02 rédigé et exécuté : profondeur 8, `min_samples_leaf` 5 choisis sur la validation ; test :
+  accuracy 0,857, F1 0,669, AUC 0,906 pour les deux modèles, ~20× plus lent.
+- ✅ Réponse : **situation familiale n°1** (importance 0,43, plus forte perte en ablation), éducation n°2 (0,22).
+  Hypothèse de départ rejetée.
+- ✅ Rapport `report/report.pdf` (6 pages).
+- ⬜ Slides et répétitions de l'oral (13/11).
 
 ## 9. Règles pour travailler sur le repo
 

@@ -8,9 +8,12 @@ Projet de machine learning (cours d'Alassane Diallo).
 Classification binaire : prédire si le revenu annuel d'une personne dépasse 50 000 $
 à partir de ses caractéristiques socio-démographiques (recensement américain de 1994).
 
-Question de recherche (provisoire) : quels facteurs déterminent un revenu supérieur à 50K $,
-et un arbre de classification CART implémenté from scratch atteint-il les mêmes
-performances que `DecisionTreeClassifier` de scikit-learn sur les mêmes splits ?
+Question de recherche : l'éducation est-elle le principal déterminant d'un revenu supérieur à
+50K $, ou d'autres facteurs (situation familiale, âge, temps de travail) pèsent-ils davantage ?
+
+Résultat : notre CART donne les mêmes métriques que scikit-learn sur le test (accuracy 85,7 %,
+F1 0,669, AUC 0,906 ; 99,98 % de prédictions identiques). La situation familiale arrive en
+premier, l'éducation en second. Rapport : `report/report.pdf`.
 
 ## Données
 
@@ -27,6 +30,8 @@ notebooks/02_experiments.ipynb         expériences et réponse à la question
 src/data.py                            chargement et préparation des données
 src/cart.py                            arbre CART from scratch
 tests/test_cart.py                     tests du CART
+report/report.pdf                      rapport (généré par report/build_report.py)
+report/figures/                        figures écrites par le notebook 02
 CONTEXT.md                             contexte complet du projet et des décisions
 PLAN.md                                plan du projet
 pyproject.toml                         dépendances
@@ -42,6 +47,8 @@ pour des versions identiques chez tout le monde).
 uv sync                                       # crée .venv et installe les versions du uv.lock
 uv run python -m src.data                     # télécharge Adult et affiche la taille des splits
 uv run pytest                                 # vérifications de l'implémentation
+# puis exécuter notebooks/01 puis notebooks/02 du début à la fin (kernel .venv)
+uv run --with reportlab python report/build_report.py   # régénère le rapport PDF
 ```
 
 Ajouter une dépendance : `uv add <paquet>` (jamais `pip install`).
