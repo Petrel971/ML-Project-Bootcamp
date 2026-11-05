@@ -29,6 +29,25 @@ code = ParagraphStyle("code", fontName="Courier", fontSize=8, leading=10, leftIn
 
 P = lambda t, s=body: Paragraph(t, s)
 
+EQ_DIR = FIG / "equations"
+
+
+def eq(latex, name, size=13):
+    """Renders a formula with Matplotlib's mathtext (TeX syntax, no LaTeX install needed)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    EQ_DIR.mkdir(parents=True, exist_ok=True)
+    path = EQ_DIR / f"{name}.png"
+    fig = plt.figure(figsize=(0.01, 0.01))
+    fig.text(0, 0, f"${latex}$", fontsize=size, math_fontfamily="cm")
+    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.04, transparent=True)
+    plt.close(fig)
+    img = Image(str(path))
+    img.drawWidth, img.drawHeight = img.drawWidth * 72 / 300, img.drawHeight * 72 / 300
+    img.hAlign = "CENTER"
+    return KeepTogether([Spacer(1, 2), img, Spacer(1, 6)])
+
 
 def table(rows, widths, header=True):
     t = Table(rows, colWidths=widths, hAlign="CENTER")
@@ -103,15 +122,15 @@ story = [
     P("3. Method: CART from scratch", h1),
     P("3.1 Model", h2),
     P("A classification tree partitions the feature space into rectangles R<sub>1</sub>, …, R<sub>M</sub> "
-      "(the leaves) with rules x<sub>j</sub> ≤ s at internal nodes. In leaf R<sub>m</sub> the class proportions "
-      "are p<sub>mk</sub> = (1/n<sub>m</sub>) Σ<sub>i∈R<sub>m</sub></sub> 1(y<sub>i</sub> = k); the tree predicts "
-      "argmax<sub>k</sub> p<sub>mk</sub> and returns p<sub>mk</sub> as probability."),
+      "(the leaves) with rules x<sub>j</sub> ≤ s at internal nodes. In leaf R<sub>m</sub>, with n<sub>m</sub> "
+      "training points, the tree returns the class proportions as probabilities and predicts the majority class:"),
+    eq(r"\hat p_{mk} = \dfrac{1}{n_m}\sum_{x_i \in R_m} \mathbf{1}(y_i = k), \qquad \hat y(x) = \arg\max_k\, \hat p_{mk} \quad \mathrm{for}\ x \in R_m", "model"),
     P("3.2 Objective", h2),
     P("Node impurity is measured by the Gini index (entropy is also implemented):"),
-    P("G = 1 − Σ<sub>k</sub> p<sub>k</sub><super>2</super>,   0 for a pure node, 0.5 at most with two classes", formula),
+    eq(r"G = 1 - \sum_{k} p_k^2 \qquad (G = 0 \ \mathrm{if\ pure},\ G \leq 0.5 \ \mathrm{with\ two\ classes})", "gini"),
     P("A split sending n<sub>L</sub> points left and n<sub>R</sub> right is scored by the size-weighted impurity of "
       "its children; the best split minimises it, i.e. maximises the gain G<sub>parent</sub> − G<sub>split</sub>:"),
-    P("G<sub>split</sub> = (n<sub>L</sub>/n) G<sub>L</sub> + (n<sub>R</sub>/n) G<sub>R</sub>", formula),
+    eq(r"G_{split} = \dfrac{n_L}{n}\, G_L + \dfrac{n_R}{n}\, G_R, \qquad \Delta = G_{parent} - G_{split}", "split"),
     P("G is the chance that two points drawn at random in the node have different labels. Weighting by size "
       "prevents a split that isolates a single pure point from looking excellent. At the root of Adult "
       "G = 1 − (0.761² + 0.239²) = 0.364. On exercise 3B.1 of the lecture (10 clients, root G = 0.48), "
@@ -122,14 +141,18 @@ story = [
       "we test the midpoints (a + b)/2, as scikit-learn does. A naive search splits and scores the data for "
       "every candidate: O(d·n²). Our <b>vectorised</b> search sorts each feature once; moving to the next threshold "
       "moves one point from right to left, so the left class counts of all thresholds are the cumulative sums of "
-      "the one-hot labels (right = total − left). All scores of a feature come from one NumPy expression, "
-      "O(d·n log n). On continuous data it is 36× faster than the naive version at n = 250 and 260× at n = 4,000."),
+      "the one-hot labels (right = total − left). With the points sorted by the feature, x<sub>(1)</sub> ≤ … ≤ x<sub>(n)</sub>:"),
+    eq(r"N^{L}_{k}(i) = \sum_{r=1}^{i} \mathbf{1}(y_{(r)} = k), \qquad N^{R}_{k}(i) = N_k - N^{L}_{k}(i), \qquad s_i = \dfrac{x_{(i)} + x_{(i+1)}}{2}", "cumsum"),
+    P("All scores of a feature come from one NumPy expression, O(d·n log n). On continuous data it is 36× faster "
+      "than the naive version at n = 250 and 260× at n = 4,000."),
     P("3.4 Construction and stopping", h2),
     P("As in Lecture 3B, the tree is grown greedily — best question now, no look-ahead — and recursively (finding the optimal tree is NP-hard). A node becomes a leaf when "
       "max_depth is reached, it has fewer than min_samples_split or 2·min_samples_leaf points, it is pure, no "
       "valid threshold exists, or the weighted decrease (N<sub>t</sub>/N)(G<sub>t</sub> − G<sub>split</sub>) is "
-      "below min_impurity_decrease. Optional cost-complexity pruning repeatedly collapses the node with the "
-      "smallest g(t) = (R(t) − R(T<sub>t</sub>)) / (|T<sub>t</sub>| − 1) while g(t) ≤ α."),
+      "below min_impurity_decrease. Optional cost-complexity pruning (weakest link) repeatedly collapses the node "
+      "with the smallest price per removed leaf, while it is at most α, where R(t) = (N<sub>t</sub>/N) G<sub>t</sub> and "
+      "R(T<sub>t</sub>) sums it over the leaves of the subtree:"),
+    eq(r"g(t) = \dfrac{R(t) - R(T_t)}{|T_t| - 1}", "prune"),
     Preformatted("""fit(X, y):  root = build(X, y, depth=0)
 build(X, y, depth):
     node = leaf with class proportions of y
@@ -142,9 +165,13 @@ build(X, y, depth):
     return node""", code),
     P("3.5 Prediction and importance", h2),
     P("An observation goes down the tree until a leaf (we route all rows at once with boolean masks). The "
-      "importance of feature j is Σ over nodes splitting on j of (N<sub>t</sub>/N)(G<sub>t</sub> − "
-      "(N<sub>L</sub>/N<sub>t</sub>)G<sub>L</sub> − (N<sub>R</sub>/N<sub>t</sub>)G<sub>R</sub>), normalised to 1. "
-      "For one-hot encoded variables we sum the importances of their columns."),
+      "importance of feature j is the weighted impurity decrease of the nodes that split on it, normalised to 1; for "
+      "one-hot encoded variables we sum the importances of their columns:"),
+    eq(r"I_j = \sum_{t:\ \mathrm{split\ on}\ j} \dfrac{N_t}{N}\left(G_t - \dfrac{N_{t,L}}{N_t} G_{t,L} - \dfrac{N_{t,R}}{N_t} G_{t,R}\right), \qquad I_j \leftarrow \dfrac{I_j}{\sum_k I_k}", "importance"),
+    P("Because it is measured on the training set and favours variables with many thresholds, we also compute a "
+      "<b>permutation importance</b> on the validation set: the drop in AUC when all the columns of variable v are "
+      "shuffled together (π a random permutation of the rows, 10 repeats):"),
+    eq(r"PI_v = \mathrm{AUC}(X_{val}) - \mathrm{AUC}(X_{val}^{\,\pi(v)})", "permutation"),
     P("3.6 Verification", h2),
     P("Exercise 3B.1 reproduced exactly, six automated tests (<font name='Courier'>uv run pytest</font>) and the checkpoints of notebook 01 check: known "
       "Gini values; naive = vectorised search; the same first split as scikit-learn; a perfect fit of the training "
@@ -194,6 +221,7 @@ build(X, y, depth):
            [cell("Association alone (Cramér's V)"), cell("<b>0.45</b>"), cell("0.36"), cell("occupation 0.35, age 0.32, hours 0.27")],
            [cell("First split"), cell("<b>married (civ-spouse)?</b>"), cell("—"), cell("—")],
            [cell("Importance (depth 8)"), cell("<b>0.43</b>"), cell("0.22"), cell("capital-gain 0.19, capital-loss 0.07, age 0.04, hours 0.03")],
+           [cell("Permutation: validation AUC drop"), cell("<b>0.142</b>"), cell("0.048"), cell("capital-gain 0.050, age 0.032, hours 0.017")],
            [cell("Ablation: validation AUC loss"), cell("<b>0.047</b>"), cell("0.013"), cell("capital 0.031, hours 0.007, age 0.005")],
            [cell("Ablation: validation F1 loss"), cell("<b>0.122</b>"), cell("0.058"), cell("hours 0.048, capital 0.042, age ≈ 0")],
            [cell("5 random splits"), cell("first split 5/5"), cell("2nd each time"), cell("—")]],
@@ -201,8 +229,10 @@ build(X, y, depth):
     Spacer(1, 6),
     P("<b>The hypothesis is rejected.</b> The family situation — being married and living with a spouse — is the "
       "strongest predictor by every measure: first split of the tree, twice the importance of education, and the "
-      "largest loss when it is removed. Education is clearly the <b>second</b> factor, ahead of capital income; age "
-      "and hours worked add little once marital status and education are known. The readable depth-3 tree tells "
+      "largest loss when it is removed or shuffled — about three times education on permutation importance. Education "
+      "is the <b>second</b> factor, but not by much: it is clearly second on impurity importance and on the ablation, "
+      "and tied with capital gains on permutation importance (0.048 vs 0.050). Age and hours worked add little once "
+      "marital status and education are known. The readable depth-3 tree tells "
       "the same story: unmarried people without capital gains have a 2–15 % chance of >50K depending on education; "
       "married people with at least an associate degree (education-num ≥ 12) reach 65 %."),
     P("Two subtleties. (1) relationship and marital-status carry the same information (Husband/Wife ⇔ married): "

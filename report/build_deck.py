@@ -440,6 +440,7 @@ rich(s, [[("1st question of the tree: ", True, NAVY), ("“married?”", True, G
 notes(s, """
 AMINE (1 min 15)
 So, is education the main driver? No. The very first question the tree asks is "is the person married?". When we sum the importances of each original variable, marital status weighs 0.43 — twice education, at 0.22. Education is clearly second, ahead of capital gains. Age and hours worked add little once marital status and education are known.
+We checked it with a second measure, permutation importance on the validation set: shuffle a variable and see how much AUC drops. Marital status: 0.14. Education and capital gains: about 0.05 each. So the leader is clear; education is second but close to capital income.
 And this ranking is robust: on five different random splits, the first split is always "married" and the importances barely move. Our hypothesis is rejected.
 """)
 

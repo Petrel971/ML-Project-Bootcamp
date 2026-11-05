@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Préparation oral ML</title>
+<style>
+:root { --bg:#f6f3ec; --card:#fff; --ink:#1e242c; --muted:#5e6773; --navy:#142b45; --gold:#e09a2b; --teal:#2e7d8c; --line:#e4e1da; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#12161b; --card:#1b2129; --ink:#e8e6e1; --muted:#9aa3ad; --navy:#9cc3e6; --gold:#f0b04a; --teal:#5fb3c2; --line:#2a313a; } }
+:root[data-theme="dark"] { --bg:#12161b; --card:#1b2129; --ink:#e8e6e1; --muted:#9aa3ad; --navy:#9cc3e6; --gold:#f0b04a; --teal:#5fb3c2; --line:#2a313a; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width:900px; margin:0 auto; padding:32px 16px 64px; }
+h1 { font-family:Cambria, Georgia, serif; color:var(--navy); font-size:30px; margin:0 0 4px; }
+h2 { font-family:Cambria, Georgia, serif; color:var(--navy); font-size:22px; margin:36px 0 12px; border-bottom:2px solid var(--gold); padding-bottom:4px; }
+.sub { color:var(--muted); margin:0 0 20px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; }
+.stat { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+.stat b { display:block; font-size:22px; color:var(--navy); font-family:Cambria, Georgia, serif; }
+.stat span { color:var(--muted); font-size:14px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin:10px 0; }
+.who { display:inline-block; background:var(--gold); color:#142b45; font-weight:700; border-radius:20px; padding:1px 10px; font-size:13px; margin-right:6px; }
+details { background:var(--card); border:1px solid var(--line); border-radius:10px; margin:8px 0; padding:10px 16px; }
+summary { cursor:pointer; font-weight:600; color:var(--navy); }
+details p, details ul { margin:8px 0 4px; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+th, td { border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; }
+th { color:var(--teal); }
+code { background:var(--line); border-radius:4px; padding:0 4px; }
+.tag { color:var(--teal); font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.04em; }
+</style>
+</head>
+<body>
+<main>
+<h1>Préparation de l'oral — CART sur Adult</h1>
+<p class="sub">Oral le vendredi 13/11, 14h. ≈ 10 min de présentation + questions (individuelles, 15 % de la note). Script complet dans les notes du PowerPoint.</p>
+
+<h2>Les chiffres à connaître par cœur</h2>
+<div class="grid">
+  <div class="stat"><b>48 842</b><span>personnes, recensement US 1994</span></div>
+  <div class="stat"><b>23,9 %</b><span>gagnent plus de 50K (classes déséquilibrées)</span></div>
+  <div class="stat"><b>60 / 20 / 20</b><span>split stratifié, graine 42</span></div>
+  <div class="stat"><b>profondeur 8</b><span>min_samples_leaf 5, confirmé par CV 5 plis</span></div>
+  <div class="stat"><b>F1 0,669</b><span>test, identique à sklearn (AUC 0,906, acc. 85,7 %)</span></div>
+  <div class="stat"><b>99,98 %</b><span>prédictions identiques à sklearn (2 lignes : égalités)</span></div>
+  <div class="stat"><b>≈ 20×</b><span>plus lent que sklearn (1 s vs 0,04 s)</span></div>
+  <div class="stat"><b>0,43 vs 0,22</b><span>importance statut marital vs éducation</span></div>
+</div>
+
+<h2>Qui dit quoi</h2>
+<div class="card"><span class="who">Lucas</span> Slides 1-2 (question), 4 (Gini, exercice 3B.1), 5 (recherche vectorisée), 6 (vérification), 13 (conclusion). Doit maîtriser tout <code>src/cart.py</code>.</div>
+<div class="card"><span class="who">Manuel</span> Slides 3 (données), 7 (protocole, métriques), 8 (profondeur, CV), 9 (résultats test). Doit maîtriser le split, l'encodage sans fuite, F1/AUC.</div>
+<div class="card"><span class="who">Amine</span> Slides 10 (réponse), 11 (ablation, causalité), 12 (limites). Doit maîtriser les trois mesures d'importance et les limites.</div>
+<p><b>Tout le monde</b> doit savoir refaire l'exercice 3B.1 à la main et répondre aux questions 1 à 6 ci-dessous : le prof peut interroger n'importe qui sur n'importe quoi.</p>
+
+<h2>Exercice 3B.1 à savoir refaire</h2>
+<div class="card">
+<table>
+<tr><th>client</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+<tr><td>revenu</td><td>45</td><td>60</td><td>38</td><td>52</td><td>70</td><td>25</td><td>20</td><td>28</td><td>15</td><td>22</td></tr>
+<tr><td>âge</td><td>50</td><td>45</td><td>28</td><td>35</td><td>30</td><td>55</td><td>42</td><td>25</td><td>33</td><td>38</td></tr>
+<tr><td>label</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td><td>D</td><td>D</td><td>D</td><td>D</td></tr>
+</table>
+<ul>
+<li>Racine : 6 R, 4 D → G = 1 − 0,6² − 0,4² = 1 − 0,36 − 0,16 = <b>0,48</b></li>
+<li>A « revenu &gt; 30 ? » : oui = 5 R 0 D (G = 0) ; non = 1 R 4 D (G = 1 − 0,04 − 0,64 = 0,32) → G_split = 0,5·0 + 0,5·0,32 = <b>0,16</b></li>
+<li>B « âge &gt; 40 ? » : oui = 3 R 1 D (G = 0,375) ; non = 3 R 3 D (G = 0,5) → G_split = 0,4·0,375 + 0,6·0,5 = <b>0,45</b></li>
+<li>On choisit A : gain = 0,48 − 0,16 = <b>0,32</b> (B : 0,03). Notre code trouve seul le seuil 33 (milieu de 28 et 38).</li>
+</ul>
+</div>
+
+<h2>Questions probables et réponses</h2>
+<p class="tag">Algorithme (tout le monde)</p>
+<details><summary>1. Pourquoi le Gini plutôt que l'entropie ? Que vaut-il à 50/50 ?</summary>
+<p>Les deux mesurent le mélange d'un nœud et donnent presque les mêmes arbres. Le Gini n'a pas de logarithme, c'est le choix par défaut de sklearn et du cours. À 50/50 : G = 1 − 0,25 − 0,25 = 0,5 (le maximum à deux classes), l'entropie vaut 1 bit. Lecture : probabilité que deux individus tirés au hasard dans le nœud aient des labels différents.</p></details>
+<details><summary>2. Pourquoi pondérer par la taille dans G_split ?</summary>
+<p>Sinon un split qui isole un seul point (enfant pur, G = 0) paraîtrait excellent alors qu'il ne change presque rien. Avec la pondération, cet enfant ne compte que pour 1/n.</p></details>
+<details><summary>3. Pourquoi un algorithme glouton ? Trouve-t-il le meilleur arbre ?</summary>
+<p>Non. Trouver l'arbre optimal est NP-difficile. On prend la meilleure question maintenant, sans regarder plus loin. Conséquence : un split faible qui ouvrirait un très bon split ensuite (cas type XOR) peut être raté.</p></details>
+<details><summary>4. Pourquoi tester les seuils au milieu de deux valeurs ? Pourquoi c'est suffisant ?</summary>
+<p>Entre deux valeurs consécutives distinctes a &lt; b, tous les seuils donnent la même partition des données d'entraînement. Un seuil par intervalle suffit ; le milieu (a+b)/2 est le plus neutre pour de nouveaux points, et c'est ce que fait sklearn.</p></details>
+<details><summary>5. Comment marche la version vectorisée ? Quelle complexité ?</summary>
+<p>On trie une variable une fois. Passer d'un seuil au suivant fait passer un seul point de droite à gauche, donc les effectifs par classe à gauche de tous les seuils sont les <b>sommes cumulées</b> des labels one-hot (droite = total − gauche). Tous les G_split d'une variable en une opération NumPy : O(d·n log n) au lieu de O(d·n²) pour la version naïve. Jusqu'à 261× plus rapide à n = 4000.</p></details>
+<details><summary>6. Quels critères d'arrêt ?</summary>
+<p>max_depth atteint ; moins de min_samples_split points ; moins de 2 × min_samples_leaf ; nœud pur ; aucun seuil valide ; baisse pondérée (N_t/N)(G_t − G_split) &lt; min_impurity_decrease. Plus l'élagage coût-complexité <code>ccp_alpha</code> (maillon faible) après coup.</p></details>
+<details><summary>7. Comment savez-vous que votre implémentation est juste ?</summary>
+<p>6 tests automatiques + checkpoints : valeurs connues du Gini, naïf = vectorisé, même premier split que sklearn, arbre sans limite qui apprend le train, mêmes prédictions et importances (profondeurs 1-4), même nombre de feuilles après élagage. Sur le test : 99,98 % de prédictions identiques. Les 2 lignes différentes viennent d'<b>égalités</b> : deux colonnes one-hot avec exactement le même Gini ; sklearn parcourt les variables dans un ordre aléatoire, nous dans l'ordre des colonnes.</p></details>
+<details><summary>8. Pourquoi votre version est-elle 20× plus lente ?</summary>
+<p>Même complexité (les deux temps croissent linéairement avec n), mais sklearn est en Cython compilé, travaille en place sur des indices triés et ne copie jamais les données. Nous, on re-trie chaque variable à chaque nœud et on copie <code>X[mask]</code> à chaque split, en Python. C'est une constante, pas la complexité.</p></details>
+
+<p class="tag">Protocole (Manuel en priorité)</p>
+<details><summary>9. Comment savez-vous qu'il n'y a pas de fuite de données ?</summary>
+<p>On découpe les données brutes <b>avant</b> tout encodage ; les colonnes one-hot sont fixées sur le train puis appliquées à la validation et au test. Les hyperparamètres sont choisis sur la validation (et la CV sur le train). Le test n'est utilisé qu'une fois, en section 6 ; tout ce qui vient après (erreurs par sexe, seuil) est fait sur la validation ou en validation croisée.</p></details>
+<details><summary>10. Pourquoi l'accuracy ne suffit-elle pas ?</summary>
+<p>Prédire toujours « ≤50K » donne déjà 76 % d'accuracy avec un F1 de 0 : ce modèle ne trouve personne. On suit le F1 (classe minoritaire), la précision et le rappel (quel type d'erreur domine), l'AUC (qualité du classement, indépendante du seuil) et la matrice de confusion.</p></details>
+<details><summary>11. Pourquoi aucune normalisation ?</summary>
+<p>Un arbre compare une variable à un seuil. Multiplier une variable par 10 multiplie le seuil par 10, la partition est identique.</p></details>
+<details><summary>12. Comment avez-vous choisi la profondeur ?</summary>
+<p>Courbe train / validation du F1 : maximum en validation à 8 (0,677), ensuite le train monte vers 0,8 et la validation stagne : surapprentissage. Vérifié par validation croisée 5 plis sur le train : 0,658 ± 0,015 à 8, les profondeurs 8 à 14 sont toutes à moins d'un écart-type → règle « un écart-type » : on garde la plus simple.</p></details>
+<details><summary>13. Pourquoi les valeurs manquantes en catégorie « Unknown » ?</summary>
+<p>Elles ne touchent que 3 variables catégorielles (≈ 6 %) et elles sont informatives : 9 % de >50K quand l'occupation manque, contre 24 % en moyenne. Les supprimer ou les imputer cacherait ce signal ; l'arbre peut apprendre si « inconnu » compte.</p></details>
+<details><summary>14. Pourquoi OpenML et pas le CSV Kaggle ?</summary>
+<p>Ce sont les mêmes 48 842 lignes (extraction UCI). OpenML permet un téléchargement automatique sans compte Kaggle, donc le code tourne chez le prof sans rien faire. L'URL Kaggle est donnée dans le README et le rapport.</p></details>
+
+<p class="tag">Réponse à la question (Amine en priorité)</p>
+<details><summary>15. Pourquoi regrouper les importances par variable d'origine ?</summary>
+<p>Avec le one-hot, le statut marital est éclaté en 7 colonnes. Pour comparer des <i>variables</i> (pas des colonnes), on somme les importances de leurs colonnes. Sinon une variable catégorielle serait sous-estimée.</p></details>
+<details><summary>16. Trois mesures d'importance : pourquoi, et disent-elles la même chose ?</summary>
+<p>Importance par impureté (train, biaisée vers les variables à beaucoup de seuils), importance par permutation (validation : baisse d'AUC quand on mélange la variable) et ablation (on retire la variable et on réentraîne). Toutes mettent le statut marital en n°1, environ 3× devant. L'éducation est 2e en impureté et en ablation, à égalité avec les plus-values (capital-gain) en permutation (0,048 vs 0,050).</p></details>
+<details><summary>17. Pourquoi « relationship » a-t-il une importance quasi nulle ?</summary>
+<p>Il contient la même information que le statut marital (Husband/Wife ⇔ marié). L'arbre en prend un et ignore l'autre. Retirer l'un seul ne coûte rien ; retirer les deux coûte le plus (−0,12 de F1).</p></details>
+<details><summary>18. Le statut marital <i>cause</i>-t-il un revenu élevé ?</summary>
+<p>Non, c'est une association prédictive. En 1994, « marié » est un proxy de l'âge et de l'avancée de carrière, du sexe (la plupart des mariés à &gt;50K sont « Husband ») et de l'organisation du foyer. Pour parler de cause il faudrait une expérience ou un design causal.</p></details>
+<details><summary>19. Et l'âge, il ne sert à rien ?</summary>
+<p>Si : pris seul il est lié au revenu (V de Cramér 0,32). Mais il est absorbé par le statut marital (les mariés sont plus âgés). L'importance mesure ce qu'une variable apporte <i>en plus des autres</i>.</p></details>
+
+<p class="tag">Limites (Amine en priorité)</p>
+<details><summary>20. Quand votre modèle échoue-t-il ?</summary>
+<ul>
+<li>Il rate 40 % des hauts revenus au seuil 0,5 (rappel 0,60). Un seuil de 0,36 choisi par CV monte le rappel à 0,82 en validation.</li>
+<li>Moins bon pour les femmes : rappel 0,54 vs 0,63 ; il prédit 7,4 % de hauts revenus pour 11,3 % réels → il reproduit l'écart de 1994.</li>
+<li>Instable dans le bas de l'arbre (F1 de 0,638 à 0,659 sur 5 découpages), découpes parallèles aux axes, glouton.</li>
+</ul></details>
+<details><summary>21. Comment l'améliorer ?</summary>
+<p>Élagage (implémenté), puis les ensembles : forêt aléatoire (moyenne d'arbres sur des rééchantillons, moins de variance : AUC 0,920) et gradient boosting (petits arbres qui corrigent les erreurs, moins de biais : AUC 0,931), contre 0,910 pour notre arbre. Prochaine étape naturelle : une forêt construite sur notre propre CART.</p></details>
+
+<h2>Avant le 13</h2>
+<div class="card">
+<ul>
+<li>Chacun lit ses slides + ses notes, puis le notebook de sa partie.</li>
+<li>Chacun refait l'exercice 3B.1 sur papier sans regarder.</li>
+<li>Une répétition chronométrée à trois (objectif 10 min), puis 5 min de questions croisées avec cette fiche.</li>
+</ul>
+</div>
+</main>
+</body>
+</html>
