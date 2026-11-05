@@ -158,7 +158,7 @@ build(X, y, depth):
            [cell("Split"), cell("Stratified 60/20/20, seed 42"), cell("Train to learn, validation to tune, test used <b>once</b>; 23.9 % >50K in each set")],
            [cell("Encoding"), cell("One-hot, columns fixed on train"), cell("Split first, then encode: no information from validation/test (no leakage)")],
            [cell("Scaling"), cell("None"), cell("A tree compares a variable to a threshold: scale-invariant")],
-           [cell("Tuning"), cell("max_depth 1–20, min_samples_leaf 1–100"), cell("Selected by validation F1")],
+           [cell("Tuning"), cell("max_depth 1–20, min_samples_leaf 1–100"), cell("Selected by validation F1, confirmed by 5-fold CV on train")],
            [cell("Metrics"), cell("F1, precision, recall, ROC AUC, accuracy"), cell("A constant \"≤50K\" model already gets 76 % accuracy with F1 = 0")],
            [cell("Comparison"), cell("Same splits, same hyperparameters"), cell("Ours vs DecisionTreeClassifier; also fit time and agreement rate")]],
           [2.3 * cm, 5.2 * cm, 8.5 * cm]),
@@ -171,7 +171,9 @@ build(X, y, depth):
     P("Validation F1 rises until depth 8 (0.677) and then stalls while train F1 keeps rising towards 0.8: deeper "
       "trees overfit (variance); shallower ones underfit (bias). Depth 1 has F1 = 0 although its AUC is 0.76: "
       "both children of the \"married\" split still have a ≤50K majority. min_samples_leaf = 5 slightly improves "
-      "validation F1 (0.679) and AUC (0.910). <b>Chosen: max_depth = 8, min_samples_leaf = 5.</b>"),
+      "validation F1 (0.679) and AUC (0.910). <b>Chosen: max_depth = 8, min_samples_leaf = 5.</b> A 5-fold "
+      "cross-validation on the training set confirms it: mean F1 reaches 0.658 ± 0.015 at depth 8, and deeper trees "
+      "stay within one standard deviation (best 0.662 at depth 14); by the one-standard-error rule the simplest, depth 8, is kept."),
     P("5.2 Comparison on the test set", h2),
     table([["Model", "Accuracy", "Precision", "Recall", "F1", "ROC AUC", "Fit time"],
            ["CART from scratch", "0.857", "0.751", "0.602", "0.669", "0.906", "≈ 1.0 s"],
@@ -214,12 +216,13 @@ build(X, y, depth):
       "and education the second."),
 
     P("7. Discussion: limits and when the model fails", h1),
-    P("<b>Minority class.</b> At the default threshold the tree misses 40 % of high earners (recall 0.60, precision "
-      "0.75). A threshold of 0.34, chosen on validation, raises test recall to 0.81 and F1 to 0.685 at the cost of "
-      "precision (0.59) — the right threshold depends on the cost of each error."),
-    figure("threshold.png", 9.5 * cm, "Figure 5 — Precision, recall and F1 by decision threshold (validation)."),
-    P("<b>Errors by sex.</b> Recall is 0.52 for women against 0.62 for men (F1 0.62 vs 0.68). Only 11 % of women "
-      "in the test set earn >50K, and the model predicts 7.5 %: it learns and slightly amplifies the 1994 income gap. "
+    P("All analyses below use the validation set or cross-validation; the test set is not used after section 5.2. "
+      "<b>Minority class.</b> At the default threshold the tree misses 40 % of high earners (test recall 0.60). A "
+      "threshold of 0.36, chosen by 5-fold cross-validation on the training set, raises validation recall from 0.61 to "
+      "0.82 and F1 from 0.679 to 0.694, at the cost of precision (0.76 → 0.60) — the right threshold depends on the cost of each error."),
+    figure("threshold.png", 9.5 * cm, "Figure 5 — Precision, recall and F1 by decision threshold (out-of-fold, 5-fold CV on train)."),
+    P("<b>Errors by sex (validation).</b> Recall is 0.54 for women against 0.63 for men (F1 0.65 vs 0.68). Only 11 % of women "
+      "earn >50K, and the model predicts 7.4 %: it learns and slightly amplifies the 1994 income gap. "
       "Any use of such a model for decisions about people would need a fairness analysis."),
     P("<b>Variance.</b> Over 5 random splits, the first split and the top importances are unchanged (marital "
       "0.41–0.42, education 0.22–0.23), so our answer is robust; validation F1 varies from 0.638 to 0.659 and the "

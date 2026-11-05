@@ -19,7 +19,9 @@ premier, l'éducation en second. Rapport : `report/report.pdf`.
 
 - Kaggle : https://www.kaggle.com/datasets/uciml/adult-census-income
 - Source d'origine : UCI Machine Learning Repository, https://archive.ics.uci.edu/dataset/2
-- Chargement dans le code : OpenML (`fetch_openml(name="adult", version=2)`), mis en cache dans `data/`
+- Chargement dans le code : OpenML (`fetch_openml(name="adult", version=2)`), mis en cache dans `data/`.
+  Ce sont **les mêmes données** que le CSV Kaggle (même extraction UCI de 48 842 lignes, train + test
+  d'origine réunis) ; OpenML permet un téléchargement automatique sans compte Kaggle
   (dossier ignoré par git, les données ne sont pas redistribuées).
 
 ## Structure

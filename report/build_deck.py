@@ -372,12 +372,13 @@ pt.data_label.font.color.rgb = NAVY
 card(s, 8.9, 1.95, 3.75, 1.5, "Too shallow", "Bias: both curves low.")
 card(s, 8.9, 3.6, 3.75, 1.5, "Too deep", "Variance: train ↑, val ↓.", accent=GOLD)
 shape(s, MSO_SHAPE.ROUNDED_RECTANGLE, 8.9, 5.25, 3.75, 1.5, NAVY)
-text(s, "max_depth = 8\nmin_samples_leaf = 5", 9.2, 5.45, 3.2, 1.0, 18, True, WHITE, font=HEAD)
+text(s, "max_depth = 8\nmin_samples_leaf = 5", 9.2, 5.4, 3.2, 0.8, 18, True, WHITE, font=HEAD)
+text(s, "confirmed by 5-fold CV", 9.2, 6.3, 3.2, 0.3, 12, color=GOLD)
 notes(s, """
 MANUEL (1 min)
 Here is the train and validation F1 as a function of depth. Below depth 5, both curves are low: the tree is too simple, high bias. Validation F1 peaks at depth 8, 0.677. After that, the training score keeps climbing towards 0.8 while validation stalls and drops: the extra leaves learn noise — overfitting, high variance.
 At depth 1, F1 is zero: the "married" split leaves a majority of low earners on both sides, so the tree never predicts high income — but it already ranks people well, AUC 0.76.
-We also tuned the minimum leaf size: 5 is slightly better. And scikit-learn's curve lies exactly on top of ours at every depth.
+We also tuned the minimum leaf size: 5 is slightly better. And to make sure one validation split was not lucky, we ran a 5-fold cross-validation: deeper trees are all within one standard deviation of depth 8, so we keep the simplest. And scikit-learn's curve lies exactly on top of ours at every depth.
 """)
 
 # 9 · Test results -----------------------------------------------------------
@@ -472,17 +473,17 @@ But careful: this is prediction, not causation. Marriage does not make people ri
 s = prs.slides.add_slide(BLANK)
 frame(s, 12, "Limits", "When does the model fail?", "Amine")
 card(s, 0.7, 1.95, 5.9, 2.3, "Misses high earners",
-     "Recall 0.60 at threshold 0.5. A threshold of 0.34 (chosen on validation) gives recall 0.81 and F1 0.685.", 1)
+     "Recall 0.60 at threshold 0.5. A threshold of 0.36 (chosen by CV) gives validation recall 0.82, F1 0.694.", 1)
 card(s, 6.75, 1.95, 5.9, 2.3, "Less accurate for women",
-     "Recall 0.52 vs 0.62 for men; predicts 7.5 % of high earners for a true 11 %. It learns the 1994 pay gap.", 2)
+     "Validation recall 0.54 vs 0.63 for men; predicts 7.4 % of high earners for a true 11 %: the 1994 pay gap.", 2)
 card(s, 0.7, 4.45, 5.9, 2.3, "One tree is unstable",
      "Top splits are stable, deep leaves are not (validation F1 0.638–0.659 over 5 splits). Axis-parallel, greedy cuts.", 3)
 card(s, 6.75, 4.45, 5.9, 2.3, "Ensembles do better",
      "Same splits, validation AUC: our tree 0.910 · random forest 0.920 · gradient boosting 0.931.", 4, accent=GOLD)
 notes(s, """
 AMINE (1 min)
-Where does the model fail? First, it misses high earners: recall 0.60. Lowering the threshold to 0.34, chosen on validation, raises recall to 0.81 — the right threshold depends on the cost of each error.
-Second, it is less accurate for women: recall 0.52 against 0.62. Only 11 percent of women earn above 50K in this data, and the model predicts even fewer: it learns the 1994 pay gap. Using it for real decisions would need a fairness analysis.
+Where does the model fail? First, it misses high earners: recall 0.60. Lowering the threshold to 0.36, chosen by cross-validation on the training set, raises validation recall to 0.82 — the right threshold depends on the cost of each error.
+Second, it is less accurate for women: recall 0.54 against 0.63 on the validation set — we never reuse the test set for these analyses. Only 11 percent of women earn above 50K in this data, and the model predicts even fewer: it learns the 1994 pay gap. Using it for real decisions would need a fairness analysis.
 Third, a single tree is unstable in its lower levels, and its cuts are axis-parallel and greedy.
 That is why ensembles do better: a random forest averages trees to reduce variance, boosting corrects errors step by step — AUC 0.92 and 0.93 against 0.91. Both use the split search we implemented as their building block.
 """)
