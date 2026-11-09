@@ -76,7 +76,7 @@ story = [
     P("<b>Is education the main driver of a high income?</b><br/>"
       "A CART classification tree from scratch on the Adult census data",
       ParagraphStyle("title", parent=ss["Title"], fontSize=17, leading=22)),
-    P("Lucas Petrelluzzi, Manuel, Amine — Mathematics &amp; Statistics for Machine Learning (A. Diallo), "
+    P("Lucas Petrelluzzi, Manuel Andrade, Amine Ennadzim — Mathematics &amp; Statistics for Machine Learning (A. Diallo), "
       "Albert School, MSc 1 — November 2026", ParagraphStyle("au", parent=body, alignment=TA_CENTER)),
     P("Code: <font name='Courier'>github.com/Petrel971/ML-Project-Bootcamp</font> — data: "
       "<font name='Courier'>kaggle.com/datasets/uciml/adult-census-income</font>",
@@ -310,5 +310,5 @@ def footer(canvas, doc):
 
 SimpleDocTemplate(str(HERE / "report.pdf"), pagesize=A4, leftMargin=2.2 * cm, rightMargin=2.2 * cm,
                   topMargin=1.8 * cm, bottomMargin=1.8 * cm, title="CART from scratch on Adult",
-                  author="Lucas, Manuel, Amine").build(story, onFirstPage=footer, onLaterPages=footer)
+                  author="Lucas Petrelluzzi, Manuel Andrade, Amine Ennadzim").build(story, onFirstPage=footer, onLaterPages=footer)
 print("report/report.pdf written")

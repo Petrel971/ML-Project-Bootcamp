@@ -176,7 +176,7 @@ bg(s, NAVY)
 badge(s, "?", 0.8, 0.9, 0.9)
 text(s, "Is education the main driver\nof a high income?", 0.8, 2.1, 11.5, 2.0, 46, True, WHITE, font=HEAD, spacing=0)
 text(s, "A CART classification tree, built from scratch in NumPy, on the 1994 US census", 0.8, 4.35, 11, 0.6, 20, color=GOLD)
-text(s, "Lucas · Manuel · Amine", 0.8, 5.6, 8, 0.4, 18, True, WHITE)
+text(s, "Lucas Petrelluzzi · Manuel Andrade · Amine Ennadzim", 0.8, 5.6, 8, 0.4, 18, True, WHITE)
 text(s, "Mathematics & Statistics for Machine Learning — A. Diallo · Albert School MSc 1 · 13 November 2026",
      0.8, 6.05, 11.5, 0.4, 13, color=MUTED)
 notes(s, """

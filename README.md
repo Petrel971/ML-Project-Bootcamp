@@ -1,7 +1,7 @@
 # Prédiction du revenu (Adult) avec un arbre CART from scratch
 
 Projet de machine learning (cours d'Alassane Diallo).
-Équipe : Lucas, Manuel, Amine.
+Équipe : Lucas Petrelluzzi, Manuel Andrade, Amine Ennadzim.
 
 ## Objectif
 
